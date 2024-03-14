@@ -138,10 +138,10 @@ def h_slots(thickness: float, slot: float, gap: float, max_width: float, padding
       path.d.m(padding, 0),
       path.d.m(gap + kerf, 0),
       path.placeholder(lambda w, h: hm_center(
-          segment=lambda max_width: path.d(list(seperated_by(
+          segment=lambda max_width: path.d(seperated_by(
               items=[item] * math.floor((max_width + gap) / (slot + gap)),
               seperator=seperator,
-          ))),
+          )),
           width=max_width - w,
       )),
       path.d.m(gap + kerf, 0),
@@ -166,10 +166,10 @@ def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: floa
       path.d.v(padding),
       path.d.v(gap + tab_kerf(out, kerf)),
       path.placeholder(lambda w, h: v_center(
-          segment=lambda max_height: path.d(list(seperated_by(
+          segment=lambda max_height: path.d(seperated_by(
               items=[item] * math.floor((max_height + gap) / (tab + gap)),
               seperator=seperator,
-          ))),
+          )),
           height=max_height - h,
       )),
       path.d.v(gap + tab_kerf(out, kerf)),
@@ -196,10 +196,10 @@ def v_slots(thickness: float, slot: float, gap: float, max_height: float, paddin
       path.d.m(0, padding),
       path.d.m(0, gap + kerf),
       path.placeholder(lambda w, h: vm_center(
-          segment=lambda max_height: path.d(list(seperated_by(
+          segment=lambda max_height: path.d(seperated_by(
               items=[item] * math.floor((max_height + gap) / (slot + gap)),
               seperator=seperator,
-          ))),
+          )),
           height=max_height - h,
       )),
       path.d.m(0, gap + kerf),
