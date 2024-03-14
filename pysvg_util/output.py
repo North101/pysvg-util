@@ -15,16 +15,24 @@ def filename(file: str, suffix: str | enum.Enum | None = None):
   return pathlib.Path(file).with_suffix('.svg').name
 
 
-class RegisterSVGCallable[T: SVGArgs]():
+class SVGFile[T: SVGArgs]():
   def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
     ...
 
 
-svg_list: list[RegisterSVGCallable[Any]] = []
+class VariantSVGFile[T: SVGArgs, V: enum.Enum](SVGFile[T]):
+  def __init__(self, variant: V):
+    self.variant = variant
+
+  def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
+    ...
 
 
-def register_svgs[T: SVGArgs](enum: Type[enum.Enum]):
-  def wrapped(f: Type[RegisterSVGCallable[T]]):
+svg_list: list[SVGFile[Any]] = []
+
+
+def register_svg_variants[T: SVGArgs, V: enum.Enum](enum: Type[enum.Enum]):
+  def wrapped(f: Type[VariantSVGFile[T, V]]):
     for item in enum:
       register_svg(item)(f)
     return f
@@ -32,7 +40,7 @@ def register_svgs[T: SVGArgs](enum: Type[enum.Enum]):
 
 
 def register_svg[T: SVGArgs](*args, **kwargs):
-  def wrapped(f: Type[RegisterSVGCallable[T]]):
+  def wrapped(f: Type[SVGFile[T]]):
     svg_list.append(f(*args, **kwargs))
     return f
   return wrapped
