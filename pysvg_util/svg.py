@@ -34,13 +34,17 @@ def engrave_image(path: path.d, image: types.Image, engrave: PresentationAttribu
   )
 
 
-def seperated(item: DrawSegment, seperator: DrawSegment, count: int):
-  if count == 0:
+def seperated_by(items: list[DrawSegment], seperator: DrawSegment):
+  if len(items) == 0:
     raise ValueError()
-  for _ in range(count - 1):
-    yield item
-    yield seperator
-  yield item
+
+  result = [
+      items[0],
+  ]
+  for item in items[1:]:
+    result.append(seperator)
+    result.append(item)
+  return result
 
 
 def m_center(segment: Callable[[float, float], DrawSegment], width: float = 0, height: float = 0):
@@ -104,11 +108,10 @@ def h_tabs(out: bool, thickness: float, tab: float, gap: float, max_width: float
       path.d.h(padding),
       path.d.h(gap + tab_kerf(out, kerf)),
       path.placeholder(lambda w, h: h_center(
-          segment=lambda max_width: path.d(list(seperated(
-              item=item,
+          segment=lambda max_width: path.d(seperated_by(
+              items=[item] * math.floor((max_width + gap) / (tab + gap)),
               seperator=seperator,
-              count=math.floor((max_width + gap) / (tab + gap)),
-          ))),
+          )),
           width=max_width - w,
       )),
       path.d.h(gap + tab_kerf(out, kerf)),
@@ -135,10 +138,9 @@ def h_slots(thickness: float, slot: float, gap: float, max_width: float, padding
       path.d.m(padding, 0),
       path.d.m(gap + kerf, 0),
       path.placeholder(lambda w, h: hm_center(
-          segment=lambda max_width: path.d(list(seperated(
-              item=item,
+          segment=lambda max_width: path.d(list(seperated_by(
+              items=[item] * math.floor((max_width + gap) / (slot + gap)),
               seperator=seperator,
-              count=math.floor((max_width + gap) / (slot + gap)),
           ))),
           width=max_width - w,
       )),
@@ -164,10 +166,9 @@ def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: floa
       path.d.v(padding),
       path.d.v(gap + tab_kerf(out, kerf)),
       path.placeholder(lambda w, h: v_center(
-          segment=lambda max_height: path.d(list(seperated(
-              item=item,
+          segment=lambda max_height: path.d(list(seperated_by(
+              items=[item] * math.floor((max_height + gap) / (tab + gap)),
               seperator=seperator,
-              count=math.floor((max_height + gap) / (tab + gap)),
           ))),
           height=max_height - h,
       )),
@@ -195,10 +196,9 @@ def v_slots(thickness: float, slot: float, gap: float, max_height: float, paddin
       path.d.m(0, padding),
       path.d.m(0, gap + kerf),
       path.placeholder(lambda w, h: vm_center(
-          segment=lambda max_height: path.d(list(seperated(
-              item=item,
+          segment=lambda max_height: path.d(list(seperated_by(
+              items=[item] * math.floor((max_height + gap) / (slot + gap)),
               seperator=seperator,
-              count=math.floor((max_height + gap) / (slot + gap)),
           ))),
           height=max_height - h,
       )),
