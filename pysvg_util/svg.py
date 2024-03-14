@@ -223,6 +223,15 @@ def v_pad(item: DrawSegment, pad: float):
   ])
 
 
+def box(horizontal: DrawSegment, vertical: DrawSegment):
+  return path.d([
+      horizontal,
+      vertical,
+      -horizontal,
+      -vertical,
+  ])
+
+
 class Tab():
   tab: float
   thickness: float
