@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pysvg_util"
+name = "pysvg-util"
 version = "0.1"
 description = ""
 authors = ["North101"]
