@@ -107,7 +107,7 @@ def h_tabs(out: bool, thickness: float, tab: float, gap: float, max_width: float
           segment=lambda max_width: path.d(list(seperated(
               item=item,
               seperator=seperator,
-              count=math.floor((max_width + gap) / (tab + gap)) + 1,
+              count=math.floor((max_width + gap) / (tab + gap)),
           ))),
           width=max_width - w,
       )),
@@ -138,7 +138,7 @@ def h_slots(thickness: float, slot: float, gap: float, max_width: float, padding
           segment=lambda max_width: path.d(list(seperated(
               item=item,
               seperator=seperator,
-              count=math.floor((max_width + gap) / (slot + gap)) + 1,
+              count=math.floor((max_width + gap) / (slot + gap)),
           ))),
           width=max_width - w,
       )),
@@ -167,7 +167,7 @@ def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: floa
           segment=lambda max_height: path.d(list(seperated(
               item=item,
               seperator=seperator,
-              count=math.floor((max_height + gap) / (tab + gap)) + 1,
+              count=math.floor((max_height + gap) / (tab + gap)),
           ))),
           height=max_height - h,
       )),
@@ -198,12 +198,28 @@ def v_slots(thickness: float, slot: float, gap: float, max_height: float, paddin
           segment=lambda max_height: path.d(list(seperated(
               item=item,
               seperator=seperator,
-              count=math.floor((max_height + gap) / (slot + gap)) + 1,
+              count=math.floor((max_height + gap) / (slot + gap)),
           ))),
           height=max_height - h,
       )),
       path.d.m(0, gap + kerf),
       path.d.m(0, padding),
+  ])
+
+
+def h_pad(item: DrawSegment, pad: float):
+  return path.d([
+      path.d.h(pad),
+      item,
+      path.d.h(pad),
+  ])
+
+
+def v_pad(item: DrawSegment, pad: float):
+  return path.d([
+      path.d.v(pad),
+      item,
+      path.d.v(pad),
   ])
 
 
