@@ -87,122 +87,122 @@ def tab_kerf(out: bool, kerf: float):
   return -kerf if out else kerf
 
 
-def h_tab(out: bool, height: float, width: float, kerf: float):
-  height = -height if out else height
+def h_tab(out: bool, thickness: float, tab: float, kerf: float):
+  thickness = -thickness if out else thickness
   return path.d([
-      path.d.v(height),
-      path.d.h(width - tab_kerf(out, kerf * 2)),
-      -path.d.v(height),
+      path.d.v(thickness),
+      path.d.h(tab - tab_kerf(out, kerf * 2)),
+      -path.d.v(thickness),
   ])
 
 
-def h_tabs(out: bool, height: float, width: float, gap: float, max_width: float, padding: float, kerf: float):
+def h_tabs(out: bool, thickness: float, tab: float, gap: float, max_width: float, padding: float, kerf: float):
   max_width = max_width + (padding * 2)
-  tab = h_tab(out, height, width, kerf)
+  item = h_tab(out, thickness, tab, kerf)
   seperator = path.d.h(gap + tab_kerf(out, kerf * 2))
   return path.d([
       path.d.h(padding),
-      path.d.h(width + tab_kerf(out, kerf)),
+      path.d.h(gap + tab_kerf(out, kerf)),
       path.placeholder(lambda w, h: h_center(
           segment=lambda max_width: path.d(list(seperated(
-              item=tab,
+              item=item,
               seperator=seperator,
-              count=math.floor((max_width - width) / (width + gap)) + 1,
+              count=math.floor((max_width + gap) / (tab + gap)) + 1,
           ))),
           width=max_width - w,
       )),
-      path.d.h(width + tab_kerf(out, kerf)),
+      path.d.h(gap + tab_kerf(out, kerf)),
       path.d.h(padding),
   ])
 
 
-def h_slot(height: float, width: float, kerf: float):
+def h_slot(thickness: float, slot: float, kerf: float):
   kerf = kerf * 2
   return path.d([
-      path.d.h(width - kerf),
-      path.d.v(height),
-      -path.d.h(width - kerf),
-      -path.d.v(height),
-      path.d.m(width - kerf, 0),
+      path.d.h(slot - kerf),
+      path.d.v(thickness),
+      -path.d.h(slot - kerf),
+      -path.d.v(thickness),
+      path.d.m(slot - kerf, 0),
   ])
 
 
-def h_slots(height: float, width: float, gap: float, max_width: float, padding: float, kerf: float):
+def h_slots(thickness: float, slot: float, gap: float, max_width: float, padding: float, kerf: float):
   max_width = max_width + (padding * 2)
-  slot = h_slot(height, width, kerf)
+  item = h_slot(thickness, slot, kerf)
   seperator = path.d.m(gap + (kerf * 2), 0)
   return path.d([
       path.d.m(padding, 0),
-      path.d.m(width + kerf, 0),
+      path.d.m(gap + kerf, 0),
       path.placeholder(lambda w, h: hm_center(
           segment=lambda max_width: path.d(list(seperated(
-              item=slot,
+              item=item,
               seperator=seperator,
-              count=math.floor((max_width - width) / (width + gap)) + 1,
+              count=math.floor((max_width + gap) / (slot + gap)) + 1,
           ))),
           width=max_width - w,
       )),
-      path.d.m(width + kerf, 0),
+      path.d.m(gap + kerf, 0),
       path.d.m(padding, 0),
   ])
 
 
-def v_tab(out: bool, width: float, height: float, kerf: float):
-  width = -width if out else width
+def v_tab(out: bool, thickness: float, tab: float, kerf: float):
+  thickness = -thickness if out else thickness
   return path.d([
-      -path.d.h(width),
-      path.d.v(height - tab_kerf(out, kerf * 2)),
-      path.d.h(width),
+      -path.d.h(thickness),
+      path.d.v(tab - tab_kerf(out, kerf * 2)),
+      path.d.h(thickness),
   ])
 
 
-def v_tabs(out: bool, width: float, height: float, gap: float, max_height: float, padding: float, kerf: float):
+def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: float, padding: float, kerf: float):
   max_height = max_height + (padding * 2)
-  tab = v_tab(out, width, height, kerf)
+  item = v_tab(out, thickness, tab, kerf)
   seperator = path.d.v(gap + tab_kerf(out, kerf * 2))
   return path.d([
       path.d.v(padding),
-      path.d.v(height + tab_kerf(out, kerf)),
+      path.d.v(gap + tab_kerf(out, kerf)),
       path.placeholder(lambda w, h: v_center(
           segment=lambda max_height: path.d(list(seperated(
-              item=tab,
+              item=item,
               seperator=seperator,
-              count=math.floor((max_height - height) / (height + gap)) + 1,
+              count=math.floor((max_height + gap) / (tab + gap)) + 1,
           ))),
           height=max_height - h,
       )),
-      path.d.v(height + tab_kerf(out, kerf)),
+      path.d.v(gap + tab_kerf(out, kerf)),
       path.d.v(padding),
   ])
 
 
-def v_slot(width: float, height: float, kerf: float):
+def v_slot(thickness: float, slot: float, kerf: float):
   kerf = kerf * 2
   return path.d([
-      path.d.v(height - kerf),
-      path.d.h(width),
-      -path.d.v(height - kerf),
-      -path.d.h(width),
-      path.d.m(0, height - kerf),
+      path.d.v(slot - kerf),
+      path.d.h(thickness),
+      -path.d.v(slot - kerf),
+      -path.d.h(thickness),
+      path.d.m(0, slot - kerf),
   ])
 
 
-def v_slots(width: float, height: float, gap: float, max_height: float, padding: float, kerf: float):
+def v_slots(thickness: float, slot: float, gap: float, max_height: float, padding: float, kerf: float):
   max_height = max_height + (padding * 2)
-  slot = v_slot(width, height, kerf)
+  item = v_slot(thickness, slot, kerf)
   seperator = path.d.m(0, gap + (kerf * 2))
   return path.d([
       path.d.m(0, padding),
-      path.d.m(0, height + kerf),
+      path.d.m(0, gap + kerf),
       path.placeholder(lambda w, h: vm_center(
           segment=lambda max_height: path.d(list(seperated(
-              item=slot,
+              item=item,
               seperator=seperator,
-              count=math.floor((max_height - height) / (height + gap)) + 1,
+              count=math.floor((max_height + gap) / (slot + gap)) + 1,
           ))),
           height=max_height - h,
       )),
-      path.d.m(0, height + kerf),
+      path.d.m(0, gap + kerf),
       path.d.m(0, padding),
   ])
 
@@ -220,16 +220,16 @@ class Tab():
   def h_tab(self, out: bool):
     return h_tab(
         out=out,
-        height=self.thickness,
-        width=self.tab,
+        thickness=self.thickness,
+        tab=self.tab,
         kerf=self.kerf,
     )
 
   def h_tabs(self, out: bool, width: float, pad: bool, gap: float | None = None):
     return h_tabs(
         out=out,
-        height=self.thickness,
-        width=self.tab,
+        thickness=self.thickness,
+        tab=self.tab,
         gap=gap if gap is not None else self.tab,
         max_width=width,
         padding=self.thickness if pad else 0,
@@ -238,15 +238,15 @@ class Tab():
 
   def h_slot(self):
     return h_slot(
-        height=self.thickness,
-        width=self.tab,
+        thickness=self.thickness,
+        slot=self.tab,
         kerf=self.kerf,
     )
 
   def h_slots(self, width: float, gap: float | None = None, padding: float = 0):
     return h_slots(
-        height=self.thickness,
-        width=self.tab,
+        thickness=self.thickness,
+        slot=self.tab,
         gap=gap if gap is not None else self.tab,
         max_width=width,
         padding=padding,
@@ -256,16 +256,16 @@ class Tab():
   def v_tab(self, out: bool):
     return v_tab(
         out=out,
-        width=self.thickness,
-        height=self.tab,
+        thickness=self.thickness,
+        tab=self.tab,
         kerf=self.kerf,
     )
 
   def v_tabs(self, out: bool, height: float, pad: bool, gap: float | None = None):
     return v_tabs(
         out=out,
-        width=self.thickness,
-        height=self.tab,
+        thickness=self.thickness,
+        tab=self.tab,
         gap=gap if gap is not None else self.tab,
         max_height=height,
         padding=self.thickness if pad else 0,
@@ -274,15 +274,15 @@ class Tab():
 
   def v_slot(self):
     return v_slot(
-        width=self.thickness,
-        height=self.tab,
+        thickness=self.thickness,
+        slot=self.tab,
         kerf=self.kerf,
     )
 
   def v_slots(self, height: float, gap: float | None = None, padding: float = 0):
     return v_slots(
-        width=self.thickness,
-        height=self.tab,
+        thickness=self.thickness,
+        slot=self.tab,
         gap=gap if gap is not None else self.tab,
         max_height=height,
         padding=padding,
