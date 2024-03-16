@@ -1,3 +1,4 @@
+import enum
 import math
 from typing import Callable
 
@@ -229,6 +230,44 @@ def box(horizontal: DrawSegment, vertical: DrawSegment):
       vertical,
       -horizontal,
       -vertical,
+  ])
+
+
+class Align(enum.Flag):
+  TOP = enum.auto()
+  LEFT = enum.auto()
+  BOTTOM = enum.auto()
+  RIGHT = enum.auto()
+  CENTER_V = TOP & BOTTOM
+  CENTER_H = LEFT & RIGHT
+  CENTER = CENTER_V & CENTER_H
+
+
+def m_align(item: DrawSegment, align: Align, width: float, height: float):
+  if isinstance(item, path.d):
+    item_width = item.width
+    item_height = item.height
+  else:
+    item_width = item.rel_x
+    item_height = item.rel_y
+
+  if Align.CENTER_H in align:
+    x = (item_width - width) / 2
+  if Align.RIGHT in align:
+    x = item_width - width
+  else:
+    x = 0
+
+  if Align.CENTER_V in align:
+    y = (item_height - height) / 2
+  if Align.BOTTOM in align:
+    y = item_height - height
+  else:
+    y = 0
+
+  return path.d([
+      path.d.m(x, y),
+      item,
   ])
 
 
