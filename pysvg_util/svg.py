@@ -107,7 +107,7 @@ def h_tabs(out: bool, thickness: float, tab: float, gap: float, max_width: float
   seperator = path.d.h(gap + tab_kerf(out, kerf * 2))
   return path.d([
       path.d.h(padding),
-      path.d.h((gap / 2) + tab_kerf(out, kerf)),
+      path.d.h(gap / 2),
       path.placeholder(lambda w, h: h_center(
           segment=lambda max_width: path.d(seperated_by(
               items=[item] * math.floor((max_width + gap) / (tab + gap)),
@@ -115,7 +115,7 @@ def h_tabs(out: bool, thickness: float, tab: float, gap: float, max_width: float
           )),
           width=max_width - w,
       )),
-      path.d.h((gap / 2) + tab_kerf(out, kerf)),
+      path.d.h(gap / 2),
       path.d.h(padding),
   ])
 
@@ -137,7 +137,7 @@ def h_slots(thickness: float, slot: float, gap: float, max_width: float, kerf: f
   seperator = path.d.m(gap + (kerf * 2), 0)
   return path.d([
       path.d.m(padding, 0),
-      path.d.m((gap / 2) + kerf, 0),
+      path.d.m(gap / 2, 0),
       path.placeholder(lambda w, h: hm_center(
           segment=lambda max_width: path.d(seperated_by(
               items=[item] * math.floor((max_width + gap) / (slot + gap)),
@@ -145,7 +145,7 @@ def h_slots(thickness: float, slot: float, gap: float, max_width: float, kerf: f
           )),
           width=max_width - w,
       )),
-      path.d.m((gap / 2) + kerf, 0),
+      path.d.m(gap / 2, 0),
       path.d.m(padding, 0),
   ])
 
@@ -173,7 +173,7 @@ def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: floa
   seperator = path.d.v(gap + tab_kerf(out, kerf * 2))
   return path.d([
       path.d.v(padding),
-      path.d.v((gap / 2) + tab_kerf(out, kerf)),
+      path.d.v(gap / 2),
       path.placeholder(lambda w, h: v_center(
           segment=lambda max_height: path.d(seperated_by(
               items=[item] * math.floor((max_height + gap) / (tab + gap)),
@@ -181,7 +181,7 @@ def v_tabs(out: bool, thickness: float, tab: float, gap: float, max_height: floa
           )),
           height=max_height - h,
       )),
-      path.d.v((gap / 2) + tab_kerf(out, kerf)),
+      path.d.v(gap / 2),
       path.d.v(padding),
   ])
 
@@ -203,7 +203,7 @@ def v_slots(thickness: float, slot: float, gap: float, max_height: float, kerf: 
   seperator = path.d.m(0, gap + (kerf * 2))
   return path.d([
       path.d.m(0, padding),
-      path.d.m(0, (gap / 2) + kerf),
+      path.d.m(0, gap / 2),
       path.placeholder(lambda w, h: vm_center(
           segment=lambda max_height: path.d(seperated_by(
               items=[item] * math.floor((max_height + gap) / (slot + gap)),
@@ -211,7 +211,7 @@ def v_slots(thickness: float, slot: float, gap: float, max_height: float, kerf: 
           )),
           height=max_height - h,
       )),
-      path.d.m(0, (gap / 2) + kerf),
+      path.d.m(0, gap / 2),
       path.d.m(0, padding),
   ])
 
