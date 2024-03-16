@@ -243,7 +243,17 @@ class Align(enum.Flag):
   CENTER = CENTER_V & CENTER_H
 
 
-def m_align(item: DrawSegment, align: Align, width: float, height: float):
+def m_align(align: Align, parent: DrawSegment | tuple[float, float], item: DrawSegment):
+  if isinstance(parent, path.d):
+    width = parent.width
+    height = parent.height
+  elif isinstance(parent, DrawSegment):
+    width = parent.rel_x
+    height = parent.rel_y
+  else:
+    width = parent[0]
+    height = parent[1]
+
   if isinstance(item, path.d):
     item_width = item.width
     item_height = item.height
@@ -252,16 +262,16 @@ def m_align(item: DrawSegment, align: Align, width: float, height: float):
     item_height = item.rel_y
 
   if Align.CENTER_H in align:
-    x = (item_width - width) / 2
+    x = (width - item_width) / 2
   if Align.RIGHT in align:
-    x = item_width - width
+    x = width - item_width
   else:
     x = 0
 
   if Align.CENTER_V in align:
-    y = (item_height - height) / 2
+    y = (height - item_height) / 2
   if Align.BOTTOM in align:
-    y = item_height - height
+    y = height - item_height
   else:
     y = 0
 
