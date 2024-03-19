@@ -16,15 +16,21 @@ def corner_radius_tl(r: float, bite=False):
   return path.d.a(r, r, 0, False, not bite, r, -r)
 
 
-def engrave_image(path: path.d, image: types.Image, engrave: PresentationAttributes):
-  contain_scale = min(path.width / image.width, path.height / image.height)
+def engrave_image(parent: path.d | tuple[float, float], image: types.Image, engrave: PresentationAttributes):
+  if isinstance(parent, path.d):
+    width = parent.width
+    height = parent.height
+  else:
+    width, height = parent
+
+  contain_scale = min(width / image.width, height / image.height)
   width = image.width * contain_scale * image.scale
   height = image.height * contain_scale * image.scale
   return g(
       attrs=g.attrs(transform=[
           transforms.translate(
-              x=(path.width - width) / 2,
-              y=(path.height - height) / 2,
+              x=(width - width) / 2,
+              y=(height - height) / 2,
           ),
           transforms.scale(contain_scale),
           transforms.scale(image.scale),
