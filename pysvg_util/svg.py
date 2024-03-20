@@ -244,15 +244,15 @@ class Align(enum.Flag):
   LEFT = enum.auto()
   BOTTOM = enum.auto()
   RIGHT = enum.auto()
-  CENTER_V = TOP & BOTTOM
-  CENTER_H = LEFT & RIGHT
-  CENTER = CENTER_V & CENTER_H
+  CENTER_V = TOP | BOTTOM
+  CENTER_H = LEFT | RIGHT
+  CENTER = CENTER_V | CENTER_H
 
 
 def m_align(align: Align, parent: DrawSegment | tuple[float, float], item: DrawSegment):
   if isinstance(parent, path.d):
-    width = parent.width
-    height = parent.height
+    width = parent.fill_placeholders.width
+    height = parent.fill_placeholders.height
   elif isinstance(parent, DrawSegment):
     width = parent.rel_x
     height = parent.rel_y
@@ -261,8 +261,8 @@ def m_align(align: Align, parent: DrawSegment | tuple[float, float], item: DrawS
     height = parent[1]
 
   if isinstance(item, path.d):
-    item_width = item.width
-    item_height = item.height
+    item_width = item.fill_placeholders.width
+    item_height = item.fill_placeholders.height
   else:
     item_width = item.rel_x
     item_height = item.rel_y
