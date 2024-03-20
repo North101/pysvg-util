@@ -1,4 +1,5 @@
 import enum
+import inspect
 import pathlib
 from typing import Any, Type
 
@@ -18,7 +19,7 @@ def filename(file: str, suffix: str | enum.Enum | None = None):
 class SVGFile[T: SVGArgs]():
   @property
   def filename(self):
-    return filename(__file__)
+    return filename(inspect.getfile(self))
 
   def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
     ...
