@@ -21,7 +21,7 @@ class SVGFile[T: SVGArgs]():
   def filename(self):
     return filename(inspect.getfile(self.__class__))
 
-  def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
+  def write(self, args: T) -> svg:
     ...
 
 
@@ -29,7 +29,11 @@ class VariantSVGFile[T: SVGArgs, V: enum.Enum](SVGFile[T]):
   def __init__(self, variant: V):
     self.variant = variant
 
-  def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
+  @property
+  def filename(self):
+    return filename(inspect.getfile(self.__class__), self.variant)
+
+  def write(self, args: T) -> svg:
     ...
 
 
@@ -53,11 +57,11 @@ def register_svg[T: SVGArgs](*args, **kwargs):
 
 def generate_svgs(args: SVGArgs):
   args.output.mkdir(parents=True, exist_ok=True)
-  data = []
-  for svg in svg_list:
-    if isinstance(args, svg.__call__.__annotations__.get('args', tuple())):
-      data.append((svg.filename, svg(args)[1]))
-
+  data = [
+      (write_svg.filename, write_svg.write(args))
+      for write_svg in svg_list
+      if isinstance(args, write_svg.write.__annotations__.get('args', tuple()))
+  ]
   for (filename, svg_data) in data:
     (args.output / filename).write_text(format(svg_data, '.3f'))
 
