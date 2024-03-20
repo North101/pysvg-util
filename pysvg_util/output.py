@@ -19,7 +19,7 @@ def filename(file: str, suffix: str | enum.Enum | None = None):
 class SVGFile[T: SVGArgs]():
   @property
   def filename(self):
-    return filename(inspect.getfile(self))
+    return filename(inspect.getfile(self.__class__))
 
   def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
     ...
