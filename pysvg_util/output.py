@@ -12,10 +12,14 @@ def filename(file: str, suffix: str | enum.Enum | None = None):
     if isinstance(suffix, enum.Enum):
       suffix = suffix.name.lower()
     file = f'{pathlib.Path(file).stem}_{suffix}'
-  return pathlib.Path(file).with_suffix('.svg').name
+  return pathlib.Path(pathlib.Path(file).with_suffix('.svg').name)
 
 
 class SVGFile[T: SVGArgs]():
+  @property
+  def filename(self):
+    return filename(__file__)
+
   def __call__(self, args: T) -> tuple[pathlib.Path, svg]:
     ...
 
@@ -48,11 +52,11 @@ def register_svg[T: SVGArgs](*args, **kwargs):
 
 def generate_svgs(args: SVGArgs):
   args.output.mkdir(parents=True, exist_ok=True)
-  data = [
-      write_svg(args)
-      for write_svg in svg_list
-      if isinstance(args, write_svg.__call__.__annotations__.get('args', tuple()))
-  ]
+  data = []
+  for svg in svg_list:
+    if isinstance(args, svg.__call__.__annotations__.get('args', tuple())):
+      data.append((svg.filename, svg(args)[1]))
+
   for (filename, svg_data) in data:
     (args.output / filename).write_text(format(svg_data, '.3f'))
 
