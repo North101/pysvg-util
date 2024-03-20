@@ -54,7 +54,7 @@ def generate_svgs(args: SVGArgs):
       if isinstance(args, write_svg.__call__.__annotations__.get('args', tuple()))
   ]
   for (filename, svg_data) in data:
-    filename.write_text(format(svg_data, '.3f'))
+    (args.output / filename).write_text(format(svg_data, '.3f'))
 
   return data
 
