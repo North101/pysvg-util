@@ -269,14 +269,14 @@ def m_align(align: Align, parent: DrawSegment | tuple[float, float], item: DrawS
 
   if Align.CENTER_H in align:
     x = (width - item_width) / 2
-  if Align.RIGHT in align:
+  elif Align.RIGHT in align:
     x = width - item_width
   else:
     x = 0
 
   if Align.CENTER_V in align:
     y = (height - item_height) / 2
-  if Align.BOTTOM in align:
+  elif Align.BOTTOM in align:
     y = height - item_height
   else:
     y = 0
