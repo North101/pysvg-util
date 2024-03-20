@@ -28,6 +28,7 @@ class SVGFile[T: SVGArgs]():
 class VariantSVGFile[T: SVGArgs, V: enum.Enum](SVGFile[T]):
   def __init__(self, variant: V):
     self.variant = variant
+    print(self.variant)
 
   @property
   def filename(self):
